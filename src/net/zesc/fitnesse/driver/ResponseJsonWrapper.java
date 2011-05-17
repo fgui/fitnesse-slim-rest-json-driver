@@ -24,10 +24,23 @@ class ResponseJsonWrapper {
 		try {
 			return new JSONObject().put("status", getStatusJson())
 					.put("header", getHeaderJson())
-					.put("body", new JSONObject(getBodyString()));
+					.put("body", getBodyJson());
 		} catch (JSONException e) {
 			// let fitnesse show the exception.
 			throw new RuntimeException(e);
+		}
+	}
+
+	private JSONObject getBodyJson() throws JSONException {
+		String bodyString = getBodyString();
+		if (bodyString==null){
+			return new JSONObject();
+		}
+		try {
+			return new JSONObject(bodyString);
+			//if string is not json add it as txt
+		} catch (JSONException e) {
+			return new JSONObject().put("text",bodyString);
 		}
 	}
 
