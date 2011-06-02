@@ -17,9 +17,11 @@ public class RestJsonDriver {
 	}
 
 	/**
-	 * Convenient method to assign variables in FitNesse/SLIM.
-	 * There may be a better way to do this in FitNesse/SLIM
-	 * @param str string to be returned.
+	 * Convenient method to assign variables in FitNesse/SLIM. There may be a
+	 * better way to do this in FitNesse/SLIM
+	 * 
+	 * @param str
+	 *            string to be returned.
 	 * @return param str.
 	 */
 	public String echo(String str) {
@@ -27,9 +29,20 @@ public class RestJsonDriver {
 	}
 
 	/**
-	 * Convenient method to generate random strings.
-	 * Provide a String and the same String with a random 
-	 * integer suffix will be returned.
+	 * Convert and id to string.
+	 * Ignored decimal part.
+	 * This is useful if you get an ID as a number like 15.00 which you need to use
+	 * later on as a String 15.  
+	 * @param id
+	 * @return
+	 */
+	public String idToString(Number id) {
+		return Long.toString(id.longValue());
+	}
+
+	/**
+	 * Convenient method to generate random strings. Provide a String and the
+	 * same String with a random integer suffix will be returned.
 	 */
 	public String concatRandomInt(String str) {
 		return str + Math.abs(new Random().nextInt());
@@ -58,4 +71,12 @@ public class RestJsonDriver {
 		return engine.eval("(" + json + ")." + js);
 	}
 
+	/**
+	 * same as retrieveJsJson here because it may be a better method name.
+	 * 
+	 * @throws ScriptException
+	 */
+	public Object evalJsJson(String js, String json) throws ScriptException {
+		return retrieveJsJson(js, json);
+	}
 }
