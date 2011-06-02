@@ -1,5 +1,4 @@
 package net.zesc.fitnesse.driver;
-
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
