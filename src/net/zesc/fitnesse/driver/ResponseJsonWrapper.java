@@ -8,6 +8,7 @@ import java.io.InputStreamReader;
 import org.apache.http.Header;
 import org.apache.http.HttpEntity;
 import org.apache.http.HttpResponse;
+import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
 
@@ -23,25 +24,33 @@ class ResponseJsonWrapper {
 	public JSONObject toJson() {
 		try {
 			return new JSONObject().put("status", getStatusJson())
-					.put("header", getHeaderJson())
-					.put("body", getBodyJson());
+					.put("header", getHeaderJson()).put("body", getBodyJson());
 		} catch (JSONException e) {
 			// let fitnesse show the exception.
 			throw new RuntimeException(e);
 		}
 	}
 
-	private JSONObject getBodyJson() throws JSONException {
+	private Object getBodyJson() throws JSONException {
 		String bodyString = getBodyString();
-		if (bodyString==null){
+		if (bodyString == null) {
 			return new JSONObject();
 		}
 		try {
-			return new JSONObject(bodyString);
-			//if string is not json add it as txt
+			if (bodyString.startsWith("[")) {
+				return new JSONArray(bodyString);
+			} else if (bodyString.isEmpty()) {
+				return new JSONObject();
+			} else {
+				return new JSONObject(bodyString);
+			}
+			// if string is not json add it as txt
 		} catch (JSONException e) {
-			return new JSONObject().put("text",bodyString);
+			// do nothing an error will be printed to sysout and added to JSON.
 		}
+		System.out.println(bodyString);
+		return new JSONObject().put("error",
+				"No JSON body. Check system output");
 	}
 
 	private JSONObject getStatusJson() throws JSONException {
@@ -54,7 +63,7 @@ class ResponseJsonWrapper {
 		Header[] allHeaders = response.getAllHeaders();
 		JSONObject jsonObject = new JSONObject();
 		for (Header header : allHeaders) {
-			jsonObject.put(header.getName(),header.getValue());
+			jsonObject.put(header.getName(), header.getValue());
 		}
 		return jsonObject;
 	}
@@ -98,5 +107,4 @@ class ResponseJsonWrapper {
 		}
 		return sb.toString();
 	}
-
 }
