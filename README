@@ -1,4 +1,6 @@
 Small driver to test REST-JSON APIs with FitNesse.
+==================================================
+
 Allows to REST-JSON api with FitNesse/SLIM without writing extra java code "Fixtures or Drivers".
 
 Driver provides methods for rest calls:
