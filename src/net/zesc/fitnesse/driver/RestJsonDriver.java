@@ -62,6 +62,10 @@ public class RestJsonDriver {
 		return restClient.get(path).toString();
 	}
 
+	public String delete(String path) throws ClientProtocolException, IOException {
+		return restClient.delete(path).toString();
+	}
+
 	/**
 	 * retrieve a javascript value from a json string.
 	 */

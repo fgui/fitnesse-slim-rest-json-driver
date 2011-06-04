@@ -1,9 +1,11 @@
 package net.zesc.fitnesse.driver;
+
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
 
 import org.apache.http.client.ClientProtocolException;
 import org.apache.http.client.HttpClient;
+import org.apache.http.client.methods.HttpDelete;
 import org.apache.http.client.methods.HttpEntityEnclosingRequestBase;
 import org.apache.http.client.methods.HttpGet;
 import org.apache.http.client.methods.HttpPost;
@@ -18,8 +20,8 @@ class RestClient {
 
 	private HttpClient httpClient = new DefaultHttpClient();
 
-	//default constructor ok
-	
+	// default constructor ok
+
 	public ResponseJsonWrapper get(String path) throws ClientProtocolException,
 			IOException {
 		HttpGet request = new HttpGet(path);
@@ -43,8 +45,17 @@ class RestClient {
 		return new ResponseJsonWrapper(httpClient.execute(request));
 	}
 
-	private void setupRequestJsonAddBody(HttpEntityEnclosingRequestBase request,
-			String data) throws UnsupportedEncodingException {
+	public ResponseJsonWrapper delete(String path)
+			throws ClientProtocolException, IOException {
+		HttpDelete request = null;
+		request = new HttpDelete(path);
+		setupRequestJSON(request);
+		return new ResponseJsonWrapper(httpClient.execute(request));
+	}
+
+	private void setupRequestJsonAddBody(
+			HttpEntityEnclosingRequestBase request, String data)
+			throws UnsupportedEncodingException {
 		StringEntity requestBody = new StringEntity(data, "UTF-8");
 		request.setEntity(requestBody);
 		setupRequestJSON(request);
